@@ -43,7 +43,7 @@ export default async function Home() {
 
   return (
     <div className="min-h-dvh">
-      <header className="bg-gradient-to-b from-emerald-700 to-emerald-900 px-4 pb-10 pt-6 text-white">
+      <div className="bg-gradient-to-b from-emerald-700 to-emerald-900 px-4 pb-8 pt-6 text-white">
         <div className="mx-auto flex w-full max-w-lg items-center justify-between">
           <span className="font-display text-xl uppercase tracking-tight">⚽ Bolão da Copa</span>
           <LogoutButton />
@@ -52,28 +52,30 @@ export default async function Home() {
           <p className="text-sm text-emerald-200">Olá,</p>
           <h1 className="font-display text-3xl uppercase leading-tight">{firstName} 👋</h1>
         </div>
-      </header>
 
-      <main className="mx-auto -mt-5 w-full max-w-lg px-4 pb-16">
-        <div className="space-y-4 rounded-2xl bg-white p-5 shadow-lg ring-1 ring-black/5">
-          {atLimit ? (
-            <p className="text-center text-sm text-amber-700">
-              Você atingiu o limite de 5 bolões. Saia de um para criar outro.
-            </p>
-          ) : (
+        <div className="mx-auto mt-6 w-full max-w-lg">
+          <div className="space-y-4 rounded-2xl bg-white p-5 shadow-lg ring-1 ring-black/5">
+            {atLimit ? (
+              <p className="text-center text-sm text-amber-700">
+                Você atingiu o limite de 5 bolões. Saia de um para criar outro.
+              </p>
+            ) : (
+              <div>
+                <h2 className="mb-3 text-xs font-bold uppercase tracking-wider text-slate-400">Criar um bolão</h2>
+                <CreateGroupForm />
+              </div>
+            )}
+            <hr className="border-slate-100" />
             <div>
-              <h2 className="mb-3 text-xs font-bold uppercase tracking-wider text-slate-400">Criar um bolão</h2>
-              <CreateGroupForm />
+              <h2 className="mb-3 text-xs font-bold uppercase tracking-wider text-slate-400">Entrar por código</h2>
+              <JoinByCode />
             </div>
-          )}
-          <hr className="border-slate-100" />
-          <div>
-            <h2 className="mb-3 text-xs font-bold uppercase tracking-wider text-slate-400">Entrar por código</h2>
-            <JoinByCode />
           </div>
         </div>
+      </div>
 
-        <h2 className="mb-3 mt-8 px-1 text-xs font-bold uppercase tracking-wider text-slate-400">Seus bolões</h2>
+      <main className="mx-auto w-full max-w-lg px-4 pb-16 pt-8">
+        <h2 className="mb-3 px-1 text-xs font-bold uppercase tracking-wider text-slate-400">Seus bolões</h2>
 
         <div className="space-y-3">
           {groups.length === 0 ? (

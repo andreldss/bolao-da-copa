@@ -4,6 +4,11 @@
   color-scheme: light;
 }
 
+html {
+  /* same as login page — overscroll bounce shows this color instead of white */
+  background-color: #022c22;
+}
+
 body {
   background-color: #f1f5f9;
   /* slate-100: fundo suave pros cards brancos */

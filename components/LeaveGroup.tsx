@@ -22,7 +22,7 @@ export default function LeaveGroup({ groupId }: { groupId: string }) {
         return (
             <button
                 onClick={() => setConfirm(true)}
-                className="text-sm text-slate-400 transition hover:text-red-500 active:opacity-75"
+                className="flex gap-1 items-center rounded-lg border border-red-600 bg-red-50 px-3 py-1.5 text-sm font-medium text-red-600 transition hover:border-red-600 hover:bg-red-600 hover:text-white active:opacity-75 cursor-pointer"
             >
                 Sair do bolão
             </button>
@@ -35,13 +35,13 @@ export default function LeaveGroup({ groupId }: { groupId: string }) {
             <button
                 onClick={leave}
                 disabled={busy}
-                className="rounded-lg bg-red-500 px-3 py-1.5 text-sm font-semibold text-white transition hover:bg-red-600 active:scale-95 disabled:opacity-40"
+                className="flex gap-1 items-center rounded-lg border border-red-600 bg-red-50 px-3 py-1.5 text-sm font-medium text-red-600 transition hover:border-red-600 hover:bg-red-600 hover:text-white active:opacity-75 cursor-pointer"
             >
                 {busy ? "Saindo…" : "Sair"}
             </button>
             <button
                 onClick={() => setConfirm(false)}
-                className="text-sm text-slate-400 transition hover:text-slate-600 active:opacity-75"
+                className="text-sm text-slate-400 transition hover:text-slate-600 active:opacity-75 cursor-pointer"
             >
                 Cancelar
             </button>

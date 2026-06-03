@@ -43,12 +43,12 @@ export default async function Home() {
 
   return (
     <div className="min-h-dvh">
-      <div className="bg-gradient-to-b from-emerald-700 to-emerald-900 px-4 pb-8 pt-6 text-white">
-        <div className="mx-auto flex w-full max-w-lg items-center justify-between">
+      <div className="bg-gradient-to-b from-emerald-700 to-emerald-900 px-4 pb-8 pt-6">
+        <div className="mx-auto flex w-full max-w-lg items-center justify-between text-white">
           <span className="font-display text-xl uppercase tracking-tight">⚽ Bolão da Copa</span>
           <LogoutButton />
         </div>
-        <div className="mx-auto mt-7 w-full max-w-lg">
+        <div className="mx-auto mt-7 w-full max-w-lg text-white">
           <p className="text-sm text-emerald-200">Olá,</p>
           <h1 className="font-display text-3xl uppercase leading-tight">{firstName} 👋</h1>
         </div>

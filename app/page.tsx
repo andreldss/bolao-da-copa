@@ -43,14 +43,19 @@ export default async function Home() {
 
   return (
     <div className="min-h-dvh">
-      <div className="bg-gradient-to-b from-emerald-700 to-emerald-900 px-4 pb-8 pt-6">
+      <div className="bg-gradient-to-b from-emerald-700 to-emerald-900 px-4 pb-8 pt-[calc(env(safe-area-inset-top)+1.5rem)]">
         <div className="mx-auto flex w-full max-w-lg items-center justify-between text-white">
-          <span className="font-display text-xl uppercase tracking-tight">⚽ Bolão da Copa</span>
+          <span className="font-display text-xl uppercase tracking-tight">
+            ⚽ Bolão da Copa
+          </span>
           <LogoutButton />
         </div>
+
         <div className="mx-auto mt-7 w-full max-w-lg text-white">
           <p className="text-sm text-emerald-200">Olá,</p>
-          <h1 className="font-display text-3xl uppercase leading-tight">{firstName} 👋</h1>
+          <h1 className="font-display text-2xl uppercase leading-tight">
+            {firstName} 👋
+          </h1>
         </div>
 
         <div className="mx-auto mt-6 w-full max-w-lg">
@@ -61,13 +66,19 @@ export default async function Home() {
               </p>
             ) : (
               <div>
-                <h2 className="mb-3 text-xs font-bold uppercase tracking-wider text-slate-400">Criar um bolão</h2>
+                <h2 className="mb-3 text-xs font-bold uppercase tracking-wider text-slate-400">
+                  Criar um bolão
+                </h2>
                 <CreateGroupForm />
               </div>
             )}
+
             <hr className="border-slate-100" />
+
             <div>
-              <h2 className="mb-3 text-xs font-bold uppercase tracking-wider text-slate-400">Entrar por código</h2>
+              <h2 className="mb-3 text-xs font-bold uppercase tracking-wider text-slate-400">
+                Entrar por código
+              </h2>
               <JoinByCode />
             </div>
           </div>

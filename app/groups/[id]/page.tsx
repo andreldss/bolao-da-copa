@@ -92,9 +92,9 @@ export default async function GroupPage({ params }: { params: Promise<{ id: stri
                 <h1 className="font-display text-4xl uppercase leading-tight">{group.name}</h1>
             </div>
 
-            <div className="mt-5">
+            {isOwner && <div className="mt-5">
                 <InviteLink code={group.invite_code} />
-            </div>
+            </div>}
 
             <Link
                 href={`/groups/${group.id}/bets`}

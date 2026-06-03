@@ -3,6 +3,7 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { supabaseAdmin } from "@/lib/supabase/admin";
 import BetsBoard, { type MatchBet, type MyPick } from "@/components/BetsBoard";
+import CopyBets from "@/components/CopyBets";
 import { ArrowLeft } from "lucide-react";
 
 type MatchRow = {
@@ -28,7 +29,7 @@ export default async function BetsPage({ params }: { params: Promise<{ id: strin
         .from("group_members").select("group_id").eq("group_id", id).eq("player_id", user.id).maybeSingle();
     if (!member) redirect("/groups");
 
-    const [{ data: matchesData }, { data: predsData }] = await Promise.all([
+    const [{ data: matchesData }, { data: predsData }, { data: groupsRaw }] = await Promise.all([
         supabaseAdmin.from("matches")
             .select("id, round_label, group_label, team1, team2, kickoff, status, home_score, away_score")
             .order("kickoff", { ascending: true }),
@@ -36,7 +37,14 @@ export default async function BetsPage({ params }: { params: Promise<{ id: strin
             .select("match_id, home_score, away_score")
             .eq("group_id", id)
             .eq("player_id", user.id),
+        supabaseAdmin.from("group_members")
+            .select("groups(id, name)")
+            .eq("player_id", user.id),
     ]);
+
+    const otherGroups = (groupsRaw ?? [])
+        .flatMap((r) => r.groups as { id: string; name: string }[])
+        .filter((g) => g.id !== id);
 
     const now = Date.now();
     const matches: MatchBet[] = ((matchesData ?? []) as MatchRow[]).map((m) => ({
@@ -54,7 +62,10 @@ export default async function BetsPage({ params }: { params: Promise<{ id: strin
             <Link href={`/groups/${id}`} className="flex items-center gap-1 mb-4 text-sm text-slate-400 hover:text-slate-600 transition">
                 <ArrowLeft size={14} /> voltar ao grupo
             </Link>
-            <h1 className="mb-5 text-2xl font-black tracking-tight">Palpites</h1>
+            <div className="mb-5 flex items-center justify-between gap-3">
+                <h1 className="text-2xl font-black tracking-tight">Palpites</h1>
+                <CopyBets groups={otherGroups} targetGroupId={id} />
+            </div>
             <BetsBoard matches={matches} myPicks={myPicks} groupId={id} />
         </main>
     );

@@ -71,7 +71,7 @@ export default async function GroupPage({ params }: { params: Promise<{ id: stri
                 <Link href="/" className="flex items-center gap-1 text-sm text-slate-400 transition hover:text-slate-600">
                     <ArrowLeft size={14} /> início
                 </Link>
-                {isOwner && <GroupOwnerMenu groupId={group.id} isOpen={group.is_open} />}
+                {isOwner && <GroupOwnerMenu groupId={group.id} groupName={group.name} isOpen={group.is_open} />}
             </div>
 
             <div className="mb-1">

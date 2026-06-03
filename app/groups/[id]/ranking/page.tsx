@@ -16,38 +16,32 @@ export default async function RankingPage({ params }: { params: Promise<{ id: st
         .from("group_members").select("group_id").eq("group_id", id).eq("player_id", user.id).maybeSingle();
     if (!member) redirect("/groups");
 
-    // participantes do grupo
     const { data: membersData } = await supabaseAdmin
         .from("group_members")
         .select("player_id, profiles(name)")
         .eq("group_id", id)
         .returns<{ player_id: string; profiles: { name: string } }[]>();
 
-    // jogos que já terminaram (com placar)
     const { data: matchesData } = await supabaseAdmin
         .from("matches")
         .select("id, home_score, away_score")
         .eq("status", "finished")
         .returns<{ id: string; home_score: number; away_score: number }[]>();
 
-    // palpites do grupo
     const { data: predsData } = await supabaseAdmin
         .from("predictions")
         .select("player_id, match_id, home_score, away_score")
         .eq("group_id", id)
         .returns<{ player_id: string; match_id: string; home_score: number; away_score: number }[]>();
 
-    // resultado de cada jogo, num mapa pra busca rápida
     const results = new Map<string, { home: number; away: number }>();
     (matchesData ?? []).forEach((m) => results.set(m.id, { home: m.home_score, away: m.away_score }));
 
-    // começa todo mundo zerado
     const table = new Map<string, Standing>();
     (membersData ?? []).forEach((m) =>
         table.set(m.player_id, { id: m.player_id, name: m.profiles.name, points: 0, exacts: 0 })
     );
 
-    // soma os pontos de cada palpite cujo jogo já acabou
     (predsData ?? []).forEach((p) => {
         const r = results.get(p.match_id);
         const s = table.get(p.player_id);

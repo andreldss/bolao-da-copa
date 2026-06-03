@@ -18,38 +18,27 @@ export default async function GroupPage({ params }: { params: Promise<{ id: stri
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) redirect("/");
 
-    const { data: groupData } = await supabaseAdmin
-        .from("groups").select("id, name, invite_code, is_open, owner_id").eq("id", id).maybeSingle();
+    const [{ data: groupData }, { data: isMember }] = await Promise.all([
+        supabaseAdmin.from("groups").select("id, name, invite_code, is_open, owner_id").eq("id", id).maybeSingle(),
+        supabaseAdmin.from("group_members").select("group_id").eq("group_id", id).eq("player_id", user.id).maybeSingle(),
+    ]);
     const group = groupData as Group | null;
     if (!group) redirect("/");
-
-    const { data: isMember } = await supabaseAdmin
-        .from("group_members").select("group_id").eq("group_id", id).eq("player_id", user.id).maybeSingle();
     if (!isMember) redirect("/");
 
-    const { data: membersData } = await supabaseAdmin
-        .from("group_members")
-        .select("player_id, profiles(name)")
-        .eq("group_id", id)
-        .returns<{ player_id: string; profiles: { name: string } }[]>();
+    const [{ data: membersRaw }, { data: matchesRaw }, { data: predsRaw }] = await Promise.all([
+        supabaseAdmin.from("group_members").select("player_id, profiles(name)").eq("group_id", id)
+            .returns<{ player_id: string; profiles: { name: string } }[]>(),
+        supabaseAdmin.from("matches").select("id, home_score, away_score").eq("status", "finished"),
+        supabaseAdmin.from("predictions").select("player_id, match_id, home_score, away_score").eq("group_id", id),
+    ]);
 
-    const memberRows = (membersData ?? []).map((m) => ({
+    const memberRows = (membersRaw ?? []).map((m) => ({
         player_id: m.player_id,
         name: m.profiles.name,
     }));
     const members = memberRows.map((r) => r.name);
-
-    // ranking computation
-    const { data: matchesRaw } = await supabaseAdmin
-        .from("matches")
-        .select("id, home_score, away_score")
-        .eq("status", "finished");
     const matchesData = (matchesRaw ?? []) as { id: string; home_score: number; away_score: number }[];
-
-    const { data: predsRaw } = await supabaseAdmin
-        .from("predictions")
-        .select("player_id, match_id, home_score, away_score")
-        .eq("group_id", id);
     const predsData = (predsRaw ?? []) as { player_id: string; match_id: string; home_score: number; away_score: number }[];
 
     const results = new Map<string, { home: number; away: number }>();

@@ -37,7 +37,7 @@ export async function importMatches(): Promise<number> {
     const data = (await response.json()) as { matches: JogoCru[] };
 
     const rows = data.matches.map((m) => {
-        const ft = m.score?.ft;                       // existe quando o jogo terminou
+        const ft = m.score?.ft;
         const finished = Array.isArray(ft) && ft.length === 2;
         return {
             ext_id: buildExtId(m),
@@ -46,9 +46,9 @@ export async function importMatches(): Promise<number> {
             team1: m.team1,
             team2: m.team2,
             kickoff: buildDateTime(m.date, m.time),
-            home_score: finished ? ft[0] : null,         // novo
-            away_score: finished ? ft[1] : null,         // novo
-            status: finished ? "finished" : "scheduled", // novo
+            home_score: finished ? ft[0] : null,
+            away_score: finished ? ft[1] : null,
+            status: finished ? "finished" : "scheduled",
         };
     });
 

@@ -28,16 +28,15 @@ export default async function BetsPage({ params }: { params: Promise<{ id: strin
         .from("group_members").select("group_id").eq("group_id", id).eq("player_id", user.id).maybeSingle();
     if (!member) redirect("/groups");
 
-    const { data: matchesData } = await supabaseAdmin
-        .from("matches")
-        .select("id, round_label, group_label, team1, team2, kickoff, status, home_score, away_score")
-        .order("kickoff", { ascending: true });
-
-    const { data: predsData } = await supabaseAdmin
-        .from("predictions")
-        .select("match_id, home_score, away_score")
-        .eq("group_id", id)
-        .eq("player_id", user.id);
+    const [{ data: matchesData }, { data: predsData }] = await Promise.all([
+        supabaseAdmin.from("matches")
+            .select("id, round_label, group_label, team1, team2, kickoff, status, home_score, away_score")
+            .order("kickoff", { ascending: true }),
+        supabaseAdmin.from("predictions")
+            .select("match_id, home_score, away_score")
+            .eq("group_id", id)
+            .eq("player_id", user.id),
+    ]);
 
     const now = Date.now();
     const matches: MatchBet[] = ((matchesData ?? []) as MatchRow[]).map((m) => ({

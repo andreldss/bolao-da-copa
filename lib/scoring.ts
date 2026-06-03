@@ -1,5 +1,5 @@
-export const POINTS_EXACT = 5;
-export const POINTS_RESULT = 2;
+export const POINTS_EXACT = 3;
+export const POINTS_RESULT = 1;
 
 export function pointsFor(
     predHome: number,

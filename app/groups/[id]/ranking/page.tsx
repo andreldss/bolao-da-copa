@@ -60,7 +60,7 @@ export default async function RankingPage({ params }: { params: Promise<{ id: st
     return (
         <main className="mx-auto max-w-md px-4 py-6">
             <h1 className="mb-1 text-2xl font-bold">Ranking</h1>
-            <p className="mb-4 text-sm text-gray-500">Placar exato = 5 pts · só o resultado = 2 pts</p>
+            <p className="mb-4 text-sm text-gray-500">Placar exato = 3 pts · resultado certo = 1 pt</p>
 
             {noPoints ? (
                 <p className="text-gray-500">
